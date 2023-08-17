@@ -1,6 +1,5 @@
 // models/Recipe.js
-const { DataTypes } = require('sequelize');
-const sequelize = require('./sequelizeConnection'); // Import the Sequelize connection
+const { sequelize, DataTypes } = require('./sequelizeConnection'); // Import the Sequelize connection
 
 const Recipe = sequelize.define('Recipe', {
   title: {

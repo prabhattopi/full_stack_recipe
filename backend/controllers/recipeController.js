@@ -1,16 +1,16 @@
 const axios = require('axios');
 
-const API_KEY = 'YOUR_SPOONACULAR_API_KEY';
+const API_KEY = process.env.API_KEY;
 
-const searchRecipes = async (query) => {
+const searchRecipes = async (req,res) => {
   try {
-    const response = await axios.get(`https://api.spoonacular.com/recipes/complexSearch`, {
-      params: {
-        apiKey: API_KEY,
-        query: query,
-      },
-    });
-    return response.data.results;
+      const {query,number}=req.query
+      if(!number){
+          number=10
+      }
+    const response = await axios.get(`https://api.spoonacular.com/recipes/autocomplete?apiKey=${API_KEY}&query=${query}&number=${number}`);
+    console.log(response.data)
+    return res.status(200).json({data:response.data})
   } catch (error) {
     throw error;
   }
