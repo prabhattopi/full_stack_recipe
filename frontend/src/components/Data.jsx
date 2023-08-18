@@ -1,13 +1,26 @@
 import React,{useState} from 'react'
 import {AiOutlineHeart,AiFillHeart} from "react-icons/ai"
+import useRecipe from '../hooks/useRecipe'
 
 
 const Data = () => {
     const [fill,setFill]=useState(false)
+    const {state}=useRecipe()
+   if(state.loading){
+       return (
+            <div className="flex items-center justify-center h-screen">
+          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gray-900 sm:h-20 sm:w-20"></div>
+        </div>
+       )
+   }
+
     return (
         <div className="flex flex-wrap justify-center items-center gap-6 mt-12 px-8 py-4">
-            <div className="flex flex-col rounded-lg shadow-xl w-[20rem] h-[26rem] relative">
-            <button onClick={()=>setFill(!fill)} className="absolute right-0 top-5 cursor-pointer z-10">
+            {
+                state.recipes?.length>0?(
+                    state.recipes?.map(e=>(
+<div className="flex flex-col rounded-lg shadow-xl w-[20rem] h-[18rem] relative">
+            <button onClick={()=>setFill(!fill)} className="absolute right-2 bottom-0 cursor-pointer z-10">
                     {
                         !fill?(<AiOutlineHeart className="text-red-500" size={30}/>):(<AiFillHeart className="text-red-500" size={30}/>)
                     }
@@ -16,57 +29,21 @@ const Data = () => {
                
                 <div className="w-full h-[13rem] rounded-lg flex items-center justify-center mt-2">
                
-                <img className="w-full h-full object-cover" src="https://w7.pngwing.com/pngs/426/730/png-transparent-logo-yellow-font-recipe-logo-art-yellow.png" alt=""/>
+                <img className="w-full h-full object-cover" src={e.image} alt={e.title}/>
                 </div>
                 <div className="flex items-center justify-center font-bold text-2xl mt-2">
-                    <h2>The world Recipe</h2>
+                    <h2>{e.title.substring(0,17)}...</h2>
                 </div>
-                 <div className="flex items-center justify-center mt-4 text-gray-500">
-                     <p className="text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim veniam obcaecati reiciendis fugiat quia expedita magnam laborum? Eum, non. Fugiat expedita harum explicabo illo quae deserunt et blanditiis assumenda sint!</p>
-                 </div>
-              
                  
             </div>
+                    ))
+
+                ):(
+                  <h1 className="text-center text-2xl mt-8">Sorry No Data Available</h1>
+                )
+            }
             
-            <div className="flex flex-col rounded-lg shadow-2xl w-[20rem] h-[26rem]">
-                <div className="w-34 h-[13rem] rounded-lg flex items-center justify-center mt-2">
-                <img className="w-full h-full object-contain" src="https://w7.pngwing.com/pngs/426/730/png-transparent-logo-yellow-font-recipe-logo-art-yellow.png" alt=""/>
-                </div>
-                <div className="flex items-center justify-center font-bold text-2xl mt-2">
-                    <h2>The world Recipe</h2>
-                </div>
-                 <div className="flex items-center justify-center mt-4 text-gray-500">
-                     <p className="text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim veniam obcaecati reiciendis fugiat quia expedita magnam laborum? Eum, non. Fugiat expedita harum explicabo illo quae deserunt et blanditiis assumenda sint!</p>
-                 </div>
-              
-                 
-            </div>
-            <div className="flex flex-col rounded-lg shadow-2xl w-[20rem] h-[26rem]">
-                <div className="w-34 h-[13rem] rounded-lg flex items-center justify-center mt-2">
-                <img className="w-full h-full object-contain" src="https://w7.pngwing.com/pngs/426/730/png-transparent-logo-yellow-font-recipe-logo-art-yellow.png" alt=""/>
-                </div>
-                <div className="flex items-center justify-center font-bold text-2xl mt-2">
-                    <h2>The world Recipe</h2>
-                </div>
-                 <div className="flex items-center justify-center mt-4 text-gray-500">
-                     <p className="text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim veniam obcaecati reiciendis fugiat quia expedita magnam laborum? Eum, non. Fugiat expedita harum explicabo illo quae deserunt et blanditiis assumenda sint!</p>
-                 </div>
-              
-                 
-            </div>
-            <div className="flex flex-col rounded-lg shadow-2xl w-[20rem] h-[26rem]">
-                <div className="w-34 h-[13rem] rounded-lg flex items-center justify-center mt-2">
-                <img className="w-full h-full object-contain" src="https://w7.pngwing.com/pngs/426/730/png-transparent-logo-yellow-font-recipe-logo-art-yellow.png" alt=""/>
-                </div>
-                <div className="flex items-center justify-center font-bold text-2xl mt-2">
-                    <h2>The world Recipe</h2>
-                </div>
-                 <div className="flex items-center justify-center mt-4 text-gray-500">
-                     <p className="text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Enim veniam obcaecati reiciendis fugiat quia expedita magnam laborum? Eum, non. Fugiat expedita harum explicabo illo quae deserunt et blanditiis assumenda sint!</p>
-                 </div>
-              
-                 
-            </div>
+            
            
         </div>
     )

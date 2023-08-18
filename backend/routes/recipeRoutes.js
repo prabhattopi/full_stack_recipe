@@ -8,7 +8,7 @@ const passport = require('passport');
 
 const router = express.Router();
 
-router.get('/search', recipeController.searchRecipes);
+router.get("/search",passport.authenticate('jwt', { session: false }),recipeController.searchRecipes);
 router.post("/preference",passport.authenticate('jwt', { session: false }),recipeController.savePreference)
 // router.post('/save', recipeController.saveRecipe);
 // router.get('/saved', recipeController.getSavedRecipes);

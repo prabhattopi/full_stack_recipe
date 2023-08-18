@@ -6,7 +6,7 @@ export const AuthContext = createContext()
 const AuthProvider = ({ children }) => {
     const [user,setUser]=useState(null);
     const [isLoading,setIsLoading]=useState(true);
-    const [token,setToken]=useState(localStorage.getItem('it_wale_token'))
+    const [token,setToken]=useState(localStorage.getItem('recipe_walle'))
     const navigate=useNavigate()
     
    useEffect(() => {
@@ -16,7 +16,7 @@ const AuthProvider = ({ children }) => {
       try {
         const response = await api.get('/auth', {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('it_wale_token')}`,
+            Authorization: `Bearer ${localStorage.getItem('recipe_walle')}`,
           },
         });
 
@@ -75,8 +75,8 @@ const AuthProvider = ({ children }) => {
     const login = async (data) => {
         try {
             const response = await api.post("/auth/login", data);
-            localStorage.setItem("it_wale_token",response.data.token)
-            setToken(localStorage.getItem('it_wale_token'))
+            localStorage.setItem("recipe_walle",response.data.token)
+            setToken(localStorage.getItem('recipe_walle'))
             
        
             toast.success(response.data.message||'Login in successfully', {
@@ -101,7 +101,7 @@ const AuthProvider = ({ children }) => {
 
         try {
             const response = await api.get("/auth/logout");
-              localStorage.removeItem('it_wale_token')
+              localStorage.removeItem('recipe_walle')
               setUser(null)
         } catch (error) {
             toast.error(error.response.data.message||'Worng credential', {

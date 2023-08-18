@@ -9,6 +9,7 @@ const searchRecipes = async (req,res) => {
           number=10
       }
     const response = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&query=${query}&number=${number}`);
+    console.log(response.data)
     return res.status(200).json({data:response.data.results})
   } catch (error) {
     throw error;
