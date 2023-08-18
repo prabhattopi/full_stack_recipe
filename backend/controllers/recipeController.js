@@ -1,9 +1,7 @@
 const axios = require('axios');
 // backend/controllers/preferenceController.js
 const Recipe = require('../models/recipe');
-const ensureAuthenticated = require('../middleware/ensureAuthenticated');
 const API_KEY = process.env.API_KEY;
-
 const searchRecipes = async (req,res) => {
   try {
       const {query,number}=req.query
@@ -19,8 +17,9 @@ const searchRecipes = async (req,res) => {
 
 
 const savePreference = async (req, res) => {
+    console.log(req.isAuthenticated())
   if (req.isAuthenticated()) {
-    const userId = req.user.id;
+    const userId = req.userId;
     const { recipeId } = req.body;
 
     try {
