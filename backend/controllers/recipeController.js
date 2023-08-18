@@ -18,15 +18,13 @@ const searchRecipes = async (req,res) => {
 
 
 const savePreference = async (req, res) => {
-    console.log(req.isAuthenticated())
   if (req.isAuthenticated()) {
     const userId = req.userId;
-    const { recipeId } = req.body;
+    const { recipeId,image,imageType,title } = req.body;
 
     try {
       await Recipe.create({
-        userId,
-        recipeId
+       recipeId,image,title,imageType,userId
       });
       res.json({ message: 'Preference saved successfully' });
     } catch (error) {
@@ -38,9 +36,48 @@ const savePreference = async (req, res) => {
   }
 };
 
+const getPreference = async (req, res) => {
+    if (req.isAuthenticated()) {
+      const userId = req.userId;
+      const { id,image,imageType,title } = req.body;
+  
+      try {
+        await Recipe.create({
+          id,image,title,imageType,userId
+        });
+        res.json({ message: 'Preference saved successfully' });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'An error occurred while saving preference.' });
+      }
+    } else {
+      res.status(401).json({ message: 'Unauthorized' });
+    }
+  };
+  
+
+const singleRecipe = async (req, res) => {
+    if (req.isAuthenticated()) {
+        try {
+            const {id}=req.params
+          const ingredientsResponse = await axios.get(`https://api.spoonacular.com/recipes/${id}/ingredientWidget.json`);
+          const nutritionResponse = await axios.get(`https://api.spoonacular.com/recipes/${id}/nutritionWidget.json`);
+          const tasteResponse = await axios.get(` https://api.spoonacular.com/recipes/${id}/tasteWidget.json`);
+
+  
+
+        
+          return res.status(200).json({nutrition:nutritionResponse.nutrients,ingredients:ingredientsResponse.ingredients,taste:tasteResponse})
+        } catch (error) {
+          throw error;
+        }
+    }
+  };
+
 
 
 module.exports = {
   searchRecipes,
-  savePreference
+  savePreference,
+  singleRecipe
 };
