@@ -14,7 +14,7 @@ const AuthProvider = ({ children }) => {
 
     const fetchData = async () => {
       try {
-        const response = await api.get('/users', {
+        const response = await api.get('/auth', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('it_wale_token')}`,
           },
@@ -53,7 +53,7 @@ const AuthProvider = ({ children }) => {
     const signup = async (data) => {
         try {
        
-            const response = await api.post("/users/register", data);
+            const response = await api.post("/auth/register", data);
             // Handle the response here, such as updating state or displaying a message
             toast.success(response.data.message||'Login in successfully', {
                 position: toast.POSITION.TOP_RIGHT, // Change the position of the toast
@@ -74,7 +74,7 @@ const AuthProvider = ({ children }) => {
 
     const login = async (data) => {
         try {
-            const response = await api.post("/users/login", data);
+            const response = await api.post("/auth/login", data);
             localStorage.setItem("it_wale_token",response.data.token)
             setToken(localStorage.getItem('it_wale_token'))
             
@@ -97,9 +97,20 @@ const AuthProvider = ({ children }) => {
               });
         }
     }
-    const logout=()=>{
-        localStorage.removeItem('it_wale_token')
-        setUser(null)
+    const logout=async()=>{
+
+        try {
+            const response = await api.get("/auth/logout");
+              localStorage.removeItem('it_wale_token')
+              setUser(null)
+        } catch (error) {
+            toast.error(error.response.data.message||'Worng credential', {
+                position: toast.POSITION.TOP_RIGHT, // Change the position of the toast
+                autoClose: 3000, // Auto-close the toast after 3000 milliseconds (3 seconds)
+                hideProgressBar:false, // Hide the progress bar
+              });
+        }
+      
     }
       const value={
         user,

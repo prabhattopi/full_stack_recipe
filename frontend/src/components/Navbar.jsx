@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import useAuth from '../hooks/useAuth';
 import Logo from "../assets/Logo.avif"
+import useAuth from '../hooks/useAuth';
 const Navbar = () => {
-    // const { logout } = useAuth();
+    const { logout } = useAuth();
 
     return (
         <div className="sticky top-0 z-20 bg-gray-800 p-4 flex justify-between items-center px-4">
@@ -16,7 +16,7 @@ const Navbar = () => {
             </Link>
      
    
-            <button className="text-white">Logout</button>
+            <button className="text-white" onClick={async()=>{await logout()}}>Logout</button>
         </div>
     );
 };
