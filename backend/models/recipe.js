@@ -17,7 +17,8 @@ const Recipe = sequelize.define('Recipe', {
     imageType: {
         type: DataTypes.STRING, // Adjust the data type as needed
         allowNull: true // Depending on your requirements
-    }
+    },
+   
     // Add other fields here
 });
 

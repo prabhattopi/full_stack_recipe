@@ -1,6 +1,7 @@
 const axios = require('axios');
 // backend/controllers/preferenceController.js
 const Recipe = require('../models/recipe');
+const User = require('../models/user');
 const API_KEY = process.env.API_KEY;
 const searchRecipes = async (req,res) => {
   try {
@@ -36,48 +37,89 @@ const savePreference = async (req, res) => {
   }
 };
 
+const deletePreference = async (req, res) => {
+    if (req.isAuthenticated()) {
+        const userId = req.userId;
+        const {id} = req.params;
+
+        try {
+            const recipe = await Recipe.findOne({
+                where: {recipeId:id,userId}
+            });
+
+            if (!recipe) {
+                return res.status(404).json({ message: 'Recipe not found or not authorized' });
+            }
+
+            await recipe.destroy();
+            res.json({ message: 'Preference deleted successfully' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'An error occurred while deleting preference.' });
+        }
+    } else {
+        res.status(401).json({ message: 'Unauthorized' });
+    }
+};
+
+
 const getPreference = async (req, res) => {
     if (req.isAuthenticated()) {
-      const userId = req.userId;
-      const { id,image,imageType,title } = req.body;
-  
-      try {
-        await Recipe.create({
-          id,image,title,imageType,userId
-        });
-        res.json({ message: 'Preference saved successfully' });
-      } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'An error occurred while saving preference.' });
-      }
-    } else {
-      res.status(401).json({ message: 'Unauthorized' });
-    }
-  };
-  
-
-const singleRecipe = async (req, res) => {
-    if (req.isAuthenticated()) {
         try {
-            const {id}=req.params
-          const ingredientsResponse = await axios.get(`https://api.spoonacular.com/recipes/${id}/ingredientWidget.json`);
-          const nutritionResponse = await axios.get(`https://api.spoonacular.com/recipes/${id}/nutritionWidget.json`);
-          const tasteResponse = await axios.get(` https://api.spoonacular.com/recipes/${id}/tasteWidget.json`);
+            const userId = req.userId;
 
-  
+            // Find the user in the database based on the userId
+            const user = await User.findByPk(userId, {
+                include: Recipe // Include associated recipes
+            });
 
-        
-          return res.status(200).json({nutrition:nutritionResponse.nutrients,ingredients:ingredientsResponse.ingredients,taste:tasteResponse})
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            // Access user's associated recipes using user.Recipes
+            res.status(200).json({ recipes: user.Recipes, message: "Your saved recipes" });
         } catch (error) {
-          throw error;
+            res.status(500).json({ message: 'Failed to get user details', error: error.message });
         }
     }
-  };
+};
+
+  
+
+  const singleRecipe = async (req, res) => {
+    if (req.isAuthenticated()) {
+        try {
+            const { id } = req.params;
+            const apiUrls = [
+                `https://api.spoonacular.com/recipes/${id}/ingredientWidget.json?apiKey=${API_KEY}`,
+                `https://api.spoonacular.com/recipes/${id}/nutritionWidget.json?apiKey=${API_KEY}`,
+                `https://api.spoonacular.com/recipes/${id}/tasteWidget.json?apiKey=${API_KEY}`,
+               ` https://api.spoonacular.com/recipes/${id}/information?apiKey=${API_KEY}&includeNutrition=false`
+            ];
+
+            const apiRequests = apiUrls.map(url => axios.get(url));
+
+            const [ingredientsResponse, nutritionResponse, tasteResponse,recipeInformation] = await axios.all(apiRequests);
+
+            return res.status(200).json({
+                nutrition: nutritionResponse.data.nutrients,
+                ingredients: ingredientsResponse.data.ingredients,
+                taste: tasteResponse.data,
+                recipeInformations:recipeInformation.data
+            });
+        } catch (error) {
+            throw error;
+        }
+    }
+};
 
 
 
 module.exports = {
   searchRecipes,
   savePreference,
-  singleRecipe
+  singleRecipe,
+  getPreference,
+  deletePreference
 };

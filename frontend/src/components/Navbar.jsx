@@ -14,9 +14,17 @@ const Navbar = () => {
 
             </div>
             </Link>
+            <div className="flex gap-8">
+                <Link to="/savedrecipe" className="text-white">
+                             Saved Recipe
+                
+                  
+                </Link>
+            <button className="text-white" onClick={async()=>{await logout()}}>Logout</button>
+            </div>
      
    
-            <button className="text-white" onClick={async()=>{await logout()}}>Logout</button>
+       
         </div>
     );
 };

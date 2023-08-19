@@ -1,5 +1,6 @@
 import React,{useState} from 'react'
 import {AiOutlineHeart,AiFillHeart} from "react-icons/ai"
+import { Link } from 'react-router-dom'
 import useRecipe from '../hooks/useRecipe'
 
 
@@ -19,14 +20,14 @@ const Data = () => {
             {
                 state.recipes?.length>0?(
                     state.recipes?.map(e=>(
-<div className="flex flex-col rounded-lg shadow-xl w-[20rem] h-[18rem] relative">
+<div key={e.id} className="flex flex-col rounded-lg shadow-xl w-[20rem] h-[18rem] relative">
             <button onClick={()=>setFill(!fill)} className="absolute right-2 bottom-0 cursor-pointer z-10">
                     {
                         !fill?(<AiOutlineHeart className="text-red-500" size={30}/>):(<AiFillHeart className="text-red-500" size={30}/>)
                     }
                
                 </button>
-               
+                <Link to={`/${e.id}`}>
                 <div className="w-full h-[13rem] rounded-lg flex items-center justify-center mt-2">
                
                 <img className="w-full h-full object-cover" src={e.image} alt={e.title}/>
@@ -34,6 +35,9 @@ const Data = () => {
                 <div className="flex items-center justify-center font-bold text-2xl mt-2">
                     <h2>{e.title.substring(0,17)}...</h2>
                 </div>
+                </Link>
+               
+                
                  
             </div>
                     ))
