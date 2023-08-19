@@ -83,7 +83,7 @@ if(state.loading){
                 </div>
             </div>
 
-            <div className="p-6 space-x-4 space-y-4">
+            <div className="p-6 flex flex-wrap gap-4">
                 <button
                     className={`py-2 px-4 rounded ${
                         activeComponent === 'nutrition' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-800'
