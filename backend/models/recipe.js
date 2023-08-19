@@ -6,7 +6,6 @@ const Recipe = sequelize.define('Recipe', {
     recipeId: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true,
     },
     userId:{
         type: DataTypes.INTEGER,
