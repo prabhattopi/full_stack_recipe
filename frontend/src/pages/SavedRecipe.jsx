@@ -4,7 +4,7 @@ import {Link} from "react-router-dom"
 const SavedRecipe = () => {
     const {state}=useRecipe()
     return (
-        <div className="flex flex-wrap justify-center items-center gap-6 mt-12 px-8 py-4">
+        <div className="flex flex-wrap justify-center items-center gap-6 mt-6 px-8 py-4">
         {state.savedRecipe?.length > 0 ? (
             state.savedRecipe?.map((recipe) => (
                 <div key={recipe.id} className="flex flex-col rounded-lg shadow-xl w-[20rem] h-[18rem] relative">
