@@ -105,8 +105,8 @@ export const RecipeProvider = ({ children }) => {
                         Authorization: `Bearer ${localStorage.getItem('recipe_walle')}`,
                     },
                 })
-             newData=[...state.savedRecipe,data]
-            dispatch({ type: "SET_TEM_SAVED_RECIPE", payload:newData })
+             let newData=[...state.savedRecipe,data]
+            dispatch({ type: "SET_SAVED_RECIPE", payload:newData })
             toast.success(response.data.message || 'Recipe saved successfully', {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 3000,
