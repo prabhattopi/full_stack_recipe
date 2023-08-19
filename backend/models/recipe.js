@@ -1,10 +1,16 @@
 // models/Recipe.js
-const { sequelize, DataTypes } = require('./sequelizeConnection'); // Import the Sequelize connection
+const { sequelize, DataTypes,models } = require('./sequelizeConnection'); // Import the Sequelize connection
 const User = require('./user'); // Import the User model
 
 const Recipe = sequelize.define('Recipe', {
     recipeId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+        unique: true,
+    },
+    userId:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
     },
     image: {
         type: DataTypes.STRING, // Adjust the data type as needed
@@ -22,7 +28,8 @@ const Recipe = sequelize.define('Recipe', {
     // Add other fields here
 });
 
-Recipe.belongsTo(User); // A Recipe belongs to a User
-User.hasMany(Recipe);    // A User has many Recipes
+
+
+
 
 module.exports = Recipe;

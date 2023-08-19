@@ -20,7 +20,7 @@ const searchRecipes = async (req,res) => {
 
 const savePreference = async (req, res) => {
   if (req.isAuthenticated()) {
-    const userId = req.userId;
+    const userId = req.user.id;
     const { recipeId,image,imageType,title } = req.body;
 
     try {
@@ -39,12 +39,12 @@ const savePreference = async (req, res) => {
 
 const deletePreference = async (req, res) => {
     if (req.isAuthenticated()) {
-        const userId = req.userId;
+        const userId = req.user.id;
         const {id} = req.params;
 
         try {
             const recipe = await Recipe.findOne({
-                where: {recipeId:id,userId}
+                where: {recipeId:id,userId:userId}
             });
 
             if (!recipe) {
@@ -52,7 +52,7 @@ const deletePreference = async (req, res) => {
             }
 
             await recipe.destroy();
-            res.json({ message: 'Preference deleted successfully' });
+            res.status(200).json({ message: 'Preference deleted successfully' });
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: 'An error occurred while deleting preference.' });
@@ -66,24 +66,27 @@ const deletePreference = async (req, res) => {
 const getPreference = async (req, res) => {
     if (req.isAuthenticated()) {
         try {
-            const userId = req.userId;
+            const userId = req.user.id;
+            console.log(userId)
 
-            // Find the user in the database based on the userId
-            const user = await User.findByPk(userId, {
-                include: Recipe // Include associated recipes
+            // Find all recipes associated with the user
+            const recipes = await Recipe.findAll({
+                where: {
+                    userId: userId
+                }
             });
 
-            if (!user) {
+            if (!recipes) {
                 return res.status(404).json({ message: 'User not found' });
             }
 
-            // Access user's associated recipes using user.Recipes
-            res.status(200).json({ recipes: user.Recipes, message: "Your saved recipes" });
+            res.status(200).json({ recipes: recipes, message: "Your saved recipes" });
         } catch (error) {
             res.status(500).json({ message: 'Failed to get user details', error: error.message });
         }
     }
 };
+
 
   
 

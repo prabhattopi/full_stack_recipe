@@ -1,6 +1,6 @@
 // models/User.js
 const { sequelize, DataTypes } = require('./sequelizeConnection');
-
+const Recipe=require("./recipe")
 const User = sequelize.define('User', {
   email: {
     type: DataTypes.STRING,
@@ -15,5 +15,8 @@ const User = sequelize.define('User', {
     allowNull: false,
   },
 });
+
+
+
 
 module.exports = User;
